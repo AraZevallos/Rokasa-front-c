@@ -13,23 +13,41 @@ export class UserService {
   public token;
   public identity;
 
-  constructor(private _http: HttpClient,) {
+  constructor(private _http: HttpClient) {
     this.url = GLOBAL.url;
-    this.user = new User('','','','','','');
+    this.user = new User('', '', '', '', '', '');
   }
 
-  login(user,getToken=null):Observable<any>{
+  login(user, getToken = null): Observable<any> {
     let json = user;
 
-    if(getToken != null){
+    if (getToken != null) {
       user.gettoken = true;
     }
 
-    let headers = new HttpHeaders().set('Content-Type','application/json');
-    return this._http.post(this.url + '/login',json,{headers:headers})
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.post(this.url + '/login', json, { headers: headers });
   }
 
-  getToken(){}
+  getToken():Observable<any> {
+    let token = localStorage.getItem('token');
+    if (token) {
+      this.token = token;
+    } else {
+      this.token = null;
+    }
 
-  getIdentity(){}
+    return this.token;
+  }
+
+  getIdentity():Observable<any> {
+    let identity = JSON.parse(localStorage.getItem('identity'));
+    if (identity) {
+      this.identity = identity;
+    } else {
+      this.identity = null;
+    }
+
+    return this.token;
+  }
 }
